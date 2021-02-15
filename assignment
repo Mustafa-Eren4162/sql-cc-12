@@ -1,0 +1,71 @@
+1-SELECT TrackId, name, Milliseconds
+  FROM tracks
+  WHERE Milliseconds >
+	(SELECT avg(milliseconds)
+	FROM tracks)
+2-SELECT FirstName, LastName, CustomerId
+  FROM customers
+  WHERE SupportRepId IN
+   (SELECT EmployeeId
+    FROM employees
+    WHERE FirstName in ("Jane", "Margaret") );
+3-SELECT c.FirstName, c.LastName, CustomerId, e.FirstName, e.LastName
+  FROM customers as c INNER JOIN employees as e
+  ON e.EmployeeId = c.SupportRepId
+  WHERE SupportRepId IN
+   (SELECT EmployeeId
+    FROM employees
+    WHERE FirstName in ("Jane", "Margaret") );
+4-CREATE TABLE courses(
+  CourseId INT,
+  Coursename TEXT NOT NULL,
+  CoursePrice INT,
+  PRIMARY KEY ("CourseId")
+ );
+CREATE TABLE courseRegistrations(
+  RegistrationId INT PRIMARY KEY,
+  CourseId NOT NULL,
+  EmployeeId NOT NULL,
+  StartDate DATE NOT NULL,
+  EndDate DATE NOT NULL,
+  Score INT,
+   FOREIGN KEY (CourseId)
+     REFERENCES courses(CourseId)
+   FOREIGN KEY (EmployeeId)
+     REFERENCES employees(EmployeeId)
+);
+5- INSERT INTO courses
+(CourseId,CoursePrice,Coursename)
+VALUES
+(1,5,"HTML"),
+(2,5,"CSS"),
+(3,5,"C"),
+(4,15,"java")
+(5,29,"Python");
+INSERT INTO courseRegistrations
+(RegistrationId,CourseId,EmployeeId)
+VALUES
+(718,1,1),
+(719,2,2),
+(720,3,3),
+(721,3,4),
+(722,4,4);
+6- DELETE FROM courseRegistrations
+WHERE RegistrationId = 722
+7- UPDATE courseRegistrations
+SET StartDate = "26-11-2020"
+WHERE RegistrationId in (718,719)
+8- UPDATE courseRegistrations
+SET EndDate = "26-10-2021"
+WHERE RegistrationId in (718,719)
+9- ALTER TABLE courses
+ADD PassScore INT NOT NULL
+DEFAULT 50
+10-SELECT TrackId,name
+FROM tracks
+WHERE TrackId not in (SELECT TrackId
+		FROM invoice_items);
+SELECT name, Quantity,t.TrackId
+FROM invoice_items as i INNER JOIN tracks as t
+ON t.TrackId = i.TrackId
+GROUP by t.TrackId;
